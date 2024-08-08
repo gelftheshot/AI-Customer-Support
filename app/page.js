@@ -1,6 +1,7 @@
+import Header from '@/components/header'
 const page = () => {
   return (
-    <div>page</div>
+      <Header />
   )
 }
 
