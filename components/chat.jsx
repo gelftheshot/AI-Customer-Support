@@ -14,7 +14,7 @@ const Chat = () => {
   const textareaRef = useRef(null);
   const chatWindowRef = useRef(null);
   const { completion, complete, isLoading } = useCompletion({
-    api: '/api/completion',
+    api: '/api/chat',
   });
 
   useEffect(() => {
