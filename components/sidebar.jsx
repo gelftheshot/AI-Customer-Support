@@ -1,11 +1,11 @@
 "use client"
 import { useState, useEffect } from "react";
-import { RiChat3Line, RiSettings4Line, RiQuestionLine } from "react-icons/ri";
+import { RiChat3Line, RiSettings4Line, RiQuestionLine, RiCloseLine } from "react-icons/ri";
 import { db } from '../firebase';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import Link from 'next/link';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, setIsOpen, isMobile }) => {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
@@ -27,8 +27,20 @@ const Sidebar = () => {
     return title.substr(0, maxLength) + '...';
   };
 
+  const sidebarClasses = `w-64 bg-gray-100 text-gray-800 flex flex-col h-full ${
+    isMobile ? (isOpen ? 'fixed inset-y-0 left-0 z-50' : 'hidden') : 'relative'
+  }`;
+
   return (
-    <div className="w-64 bg-gray-100 text-gray-800 flex flex-col h-full">
+    <div className={sidebarClasses}>
+      {isMobile && (
+        <button
+          onClick={() => setIsOpen(false)}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        >
+          <RiCloseLine className="w-6 h-6" />
+        </button>
+      )}
       <nav className="flex-1 p-4 overflow-y-auto">
         <ul className="space-y-2">
           {chats.map((chat) => (
@@ -41,7 +53,7 @@ const Sidebar = () => {
           ))}
         </ul>
       </nav>
-      <footer className="p-4 border-t border-gray-200">
+      <footer className="p-4 border-t border-gray-400">
         <ul className="space-y-2">
           <li>
             <a href="#" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-200 transition-colors">
