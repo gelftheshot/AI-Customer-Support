@@ -1,18 +1,9 @@
-import Header from '@/components/header'
-import Sidebar from '@/components/sidebar'
-import Chat from '@/components/chat'
-import '../styles/global.css'
+import StartChat from '@/components/startchat'
 
-const page = () => {
+export default function Home() {
   return (
-    <div className="flex flex-col h-screen">
-      <Header />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <Chat />
-      </div>
+    <div className="flex flex-col justify-center h-full bg-gray-100">
+      <StartChat />
     </div>
   )
 }
-
-export default page
