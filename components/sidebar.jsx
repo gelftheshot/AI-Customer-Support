@@ -28,31 +28,31 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 bg-amber-100 text-gray-800 flex flex-col h-full">
+    <div className="w-64 bg-gray-100 text-gray-800 flex flex-col h-full">
       <nav className="flex-1 p-4 overflow-y-auto">
         <ul className="space-y-2">
           {chats.map((chat) => (
             <li key={chat.id}>
-              <Link href={`/chat/${chat.id}`} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-amber-200 transition-colors">
-                <RiChat3Line className="w-5 h-5" />
-                <span>{truncateTitle(chat.title || 'Untitled Chat')}</span>
+              <Link href={`/chat/${chat.id}`} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-200 transition-colors">
+                <RiChat3Line className="w-5 h-5 text-blue-600" />
+                <span className="text-sm font-medium">{truncateTitle(chat.title || 'Untitled Chat')}</span>
               </Link>
             </li>
           ))}
         </ul>
       </nav>
-      <footer className="p-4 border-t border-amber-200">
+      <footer className="p-4 border-t border-gray-200">
         <ul className="space-y-2">
           <li>
-            <a href="#" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-amber-200 transition-colors">
-              <RiQuestionLine className="w-5 h-5" />
-              <span>Help & FAQ</span>
+            <a href="#" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-200 transition-colors">
+              <RiQuestionLine className="w-5 h-5 text-blue-600" />
+              <span className="text-sm font-medium">Help & FAQ</span>
             </a>
           </li>
           <li>
-            <a href="#" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-amber-200 transition-colors">
-              <RiSettings4Line className="w-5 h-5" />
-              <span>Settings</span>
+            <a href="#" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-200 transition-colors">
+              <RiSettings4Line className="w-5 h-5 text-blue-600" />
+              <span className="text-sm font-medium">Settings</span>
             </a>
           </li>
         </ul>

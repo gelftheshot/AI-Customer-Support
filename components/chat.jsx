@@ -133,24 +133,24 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-gray-100">
-      <div className="flex-1 overflow-y-auto p-4 space-y-6">
+    <div className="flex-1 flex flex-col bg-white">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {chatMessages.map((message, index) => (
           <Message key={index} role={message.role} content={message.content} />
         ))}
       </div>
-      <footer className="bg-white border-t border-gray-200 p-4">
+      <footer className="bg-gray-100 border-t border-gray-200 p-4">
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
           <div className="relative">
             <input
-              className="w-full p-3 pr-24 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-4 pr-24 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
               value={input}
               placeholder="Type your message here"
               onChange={(e) => setInput(e.target.value)}
             />
             <button
               type="submit"
-              className="absolute right-3 bottom-3 bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="absolute right-2 top-2 bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
             >
               Send
             </button>

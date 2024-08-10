@@ -12,8 +12,11 @@ const StartChat = () => {
   };
 
   return (
-    <div className='w-full h-full flex items-center justify-center'>
-      <button onClick={handleStartChat} className='bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out text-base font-medium'>
+    <div className='w-full h-full flex items-center justify-center bg-gray-100'>
+      <button 
+        onClick={handleStartChat} 
+        className='bg-blue-500 text-white px-8 py-4 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out text-lg font-semibold shadow-md'
+      >
         Start New Conversation
       </button>
     </div>
