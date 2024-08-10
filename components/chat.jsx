@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from 'next/navigation';
 import { db } from '../firebase';
-import { collection, query, orderBy, onSnapshot, doc, setDoc, serverTimestamp, addDoc } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, doc, setDoc, serverTimestamp, addDoc, updateDoc, getDoc } from 'firebase/firestore';
 import Message from "./message";
 
 const Chat = () => {
@@ -18,7 +18,15 @@ const Chat = () => {
       
       try {
         const chatRef = doc(db, 'chats', chatId);
-        await setDoc(chatRef, { createdAt: serverTimestamp() }, { merge: true });
+        const chatDoc = await getDoc(chatRef);
+        
+        if (!chatDoc.exists()) {
+          // Only set the title for new chats
+          await setDoc(chatRef, { 
+            createdAt: serverTimestamp(),
+            title: 'New Chat' // Default title
+          });
+        }
       } catch (error) {
         console.error("Error initializing chat:", error);
       }
@@ -101,6 +109,14 @@ const Chat = () => {
         timestamp: serverTimestamp()
       });
 
+      // After receiving the first response
+      if (chatMessages.length === 0) {
+        const chatRef = doc(db, 'chats', chatId);
+        await updateDoc(chatRef, {
+          title: truncateTitle(input, 50) // Use the first user message as the title
+        });
+      }
+
     } catch (error) {
       if (error.name === 'AbortError') {
         console.log('Request was aborted');
@@ -108,6 +124,12 @@ const Chat = () => {
         console.error("Error in chat:", error);
       }
     }
+  };
+
+  const truncateTitle = (title, maxLength = 50) => {
+    if (!title) return 'Untitled Chat';
+    if (title.length <= maxLength) return title;
+    return title.substr(0, maxLength) + '...';
   };
 
   return (
