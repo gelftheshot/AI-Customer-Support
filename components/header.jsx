@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import '../styles/global.css'
 import { RiChatNewFill } from "react-icons/ri";
+import { v4 as uuidv4 } from 'uuid';
 
 const Header = () => {
   return (
@@ -10,10 +11,10 @@ const Header = () => {
           <p>logo</p>
         </Link>
         <h1 className="text-xl font-bold">AI Chat Assistant</h1>
-        <button className="flex items-center space-x-2 px-4 py-2 bg-black text-white rounded-full hover:bg-blue-700 transition-colors">
+        <Link href={`/chat/${uuidv4()}`} className="flex items-center space-x-2 px-4 py-2 bg-black text-white rounded-full hover:bg-blue-700 transition-colors">
           <RiChatNewFill className="w-5 h-5" />
           <span>New Chat</span>
-        </button>
+        </Link>
       </div>
     </header>
   )
