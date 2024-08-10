@@ -1,23 +1,16 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useChat } from 'ai/react';
+import { useState, useEffect, useRef } from "react";
 import { useParams } from 'next/navigation';
 import { db } from '../firebase';
-import { collection, query, orderBy, onSnapshot, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, doc, setDoc, serverTimestamp, addDoc } from 'firebase/firestore';
 import Message from "./message";
 
 const Chat = () => {
   const [chatMessages, setChatMessages] = useState([]);
+  const [input, setInput] = useState('');
   const params = useParams();
   const chatId = params?.chatID;
-
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
-    api: '/api/chat',
-    body: { chatId },
-    onError: (error) => {
-      console.error("Error in chat:", error);
-    },
-  });
+  const abortControllerRef = useRef(null);
 
   useEffect(() => {
     const initializeChat = async () => {
@@ -51,6 +44,72 @@ const Chat = () => {
     return () => unsubscribe();
   }, [chatId]);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    const userMessage = { role: 'user', content: input };
+    setChatMessages(prev => [...prev, userMessage]);
+    setInput('');
+
+    // Abort previous request if it exists
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    // Create a new AbortController
+    abortControllerRef.current = new AbortController();
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: [...chatMessages, userMessage], chatId }),
+        signal: abortControllerRef.current.signal
+      });
+
+      if (!response.ok) throw new Error(response.statusText);
+
+      const data = response.body;
+      if (!data) return;
+
+      const reader = data.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+      let accumulatedResponse = '';
+
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        const chunkValue = decoder.decode(value);
+        accumulatedResponse += chunkValue;
+        setChatMessages(prev => {
+          const lastMessage = prev[prev.length - 1];
+          if (lastMessage.role === 'assistant') {
+            return [...prev.slice(0, -1), { ...lastMessage, content: accumulatedResponse }];
+          } else {
+            return [...prev, { role: 'assistant', content: accumulatedResponse }];
+          }
+        });
+      }
+
+      // Save the full AI response to the database
+      const chatRef = collection(db, 'chats', chatId, 'messages');
+      await addDoc(chatRef, {
+        content: accumulatedResponse,
+        role: 'assistant',
+        timestamp: serverTimestamp()
+      });
+
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        console.log('Request was aborted');
+      } else {
+        console.error("Error in chat:", error);
+      }
+    }
+  };
+
   return (
     <div className="flex-1 flex flex-col bg-gray-100">
       <div className="flex-1 overflow-y-auto p-4 space-y-6">
@@ -65,7 +124,7 @@ const Chat = () => {
               className="w-full p-3 pr-24 text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={input}
               placeholder="Type your message here"
-              onChange={handleInputChange}
+              onChange={(e) => setInput(e.target.value)}
             />
             <button
               type="submit"
