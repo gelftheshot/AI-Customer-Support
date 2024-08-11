@@ -3,7 +3,7 @@ import '../styles/global.css'
 import { useState, useEffect } from 'react';
 import Header from '../components/header';
 import Sidebar from '../components/sidebar';
-
+import Head from 'next/head';
 
 export default function RootLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -22,6 +22,10 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
+      <Head>
+        <title>Ai customer support</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <body>
         <div className="flex flex-col h-screen">
           <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} isMobile={isMobile} />
