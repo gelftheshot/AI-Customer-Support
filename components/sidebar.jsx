@@ -27,7 +27,7 @@ const Sidebar = ({ isOpen, setIsOpen, isMobile }) => {
     return title.substr(0, maxLength) + '...';
   };
 
-  const sidebarClasses = `w-64 bg-gray-100 text-gray-800 flex flex-col h-full ${
+  const sidebarClasses = `w-64 border-gray-200 bg-gray-100 text-gray-800 flex flex-col h-full border-r border-gray-300 ${
     isMobile ? (isOpen ? 'fixed inset-y-0 left-0 z-50' : 'hidden') : 'relative'
   }`;
 
