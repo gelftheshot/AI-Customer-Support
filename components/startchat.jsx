@@ -12,12 +12,15 @@ const StartChat = () => {
   };
 
   return (
-    <div className='w-full h-full flex items-center justify-center bg-gray-100 p-4'>
+    <div className='w-full h-full flex items-center justify-center p-4'>
       <button 
         onClick={handleStartChat} 
-        className='bg-blue-500 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out text-base md:text-lg font-semibold shadow-md'
+        className='bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-8 md:px-10 py-4 md:py-5 rounded-full hover:from-purple-600 hover:to-indigo-600 transition duration-300 ease-in-out text-lg md:text-xl font-bold shadow-lg flex items-center space-x-2'
       >
-        Start New Conversation
+        <span>Start New Conversation</span>
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+        </svg>
       </button>
     </div>
   )
